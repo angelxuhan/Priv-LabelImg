@@ -1,2 +1,3 @@
 # Priv-LabelImg
 # Usage
+# Windows
