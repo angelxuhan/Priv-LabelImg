@@ -1,0 +1,27 @@
+<annotation>
+    <folder>example_picture</folder>
+    <filename>1</filename>
+    <path>E:\\LabelImgTool-master_7\\LabelImgTool-master\\example_picture\\1.jpg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>1920</width>
+        <height>1080</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <shape_type>RECT</shape_type>
+    <object>
+        <name>H</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>440</xmin>
+            <ymin>198</ymin>
+            <xmax>773</xmax>
+            <ymax>535</ymax>
+        </bndbox>
+    </object>
+</annotation>
