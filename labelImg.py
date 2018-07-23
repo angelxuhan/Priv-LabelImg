@@ -167,19 +167,26 @@ class MainWindow(QMainWindow, WindowMixin):#可以带菜单栏、工具栏的只
         self.labelList.itemChanged.connect(self.labelItemChanged)
 
         listLayout = QVBoxLayout()#垂直布局方式
+        buttonlayout = QHBoxLayout()
         listLayout.setContentsMargins(0, 0, 0, 0)
         listLayout.addWidget(self.labelList)#垂直布局添加了一个labellist
         #button
+        self.pushbutton1=QPushButton('ALLYES')
+        self.pushbutton1.clicked.connect(self.allyes)
+        self.pushbutton2= QPushButton('ALLNO')
+        self.pushbutton2.clicked.connect(self.allno)
         self.editButton = QToolButton()
         self.editButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         #
         self.labelListContainer = QWidget()
         self.labelListContainer.setLayout(listLayout)#在这个里将所有地选项包含在dock里面相当于
         self.info_txt = QTextEdit()
+        buttonlayout.addWidget(self.pushbutton1)
+        buttonlayout.addWidget(self.pushbutton2)
 
-        listLayout.addWidget(self.editButton)  # , 0, Qt.AlignCenter)
+        listLayout.addWidget(self.editButton)
+        listLayout.addLayout(buttonlayout)  # 添加子布局
         listLayout.addWidget(self.labelList)
-
         listLayout.addWidget(self.info_txt)#提示信息
 
         self.dock = QDockWidget(u'Box Labels', self)#浮动窗口
@@ -1289,11 +1296,14 @@ class MainWindow(QMainWindow, WindowMixin):#可以带菜单栏、工具栏的只
 
     def labelItemChanged(self, item):
         shape = self.itemsToShapes[item]#就是这句话
+        print(shape.label)
         label = str(item.text())
         if label != shape.label:
+            print('niha')
             shape.label = str(item.text())
             self.setDirty()
         else:  # User probably changed item visibility
+            print('nihao')
             self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
 
     # Callback functions:
@@ -1303,19 +1313,18 @@ class MainWindow(QMainWindow, WindowMixin):#可以带菜单栏、工具栏的只
         position MUST be in global coordinates.
         """
         if self.label_sub_dic:
+
             self.labelDialog = LabelDialog(
                 parent=self,
                 sub_label_items=self.label_sub_dic,
                 label_fre_dic=self.label_fre_dic)
         elif len(self.labelHist) > 0:
             self.labelDialog = LabelDialog(
-                parent=self,
+                parent=self,#父类
                 listItem=self.labelHist,
-                label_fre_dic=self.label_fre_dic)
+                label_fre_dic=self.label_fre_dic)#前一张字典
 
         text = self.labelDialog.popUp()
-        print(text)
-
         # try:
         if text is None:
             print("eee")
@@ -1406,7 +1415,7 @@ class MainWindow(QMainWindow, WindowMixin):#可以带菜单栏、工具栏的只
         self.adjustScale()
 
     def togglePolygons(self, value):
-        for item, shape in self.itemsToShapes.iteritems():
+        for item, shape in self.itemsToShapes.items():
             item.setCheckState(Qt.Checked if value else Qt.Unchecked)
     def loadCLSFile(self,filepath):
         print('load saved clsfile')
@@ -1949,7 +1958,8 @@ class MainWindow(QMainWindow, WindowMixin):#可以带菜单栏、工具栏的只
         if self.task_mode in [0,1]:
             #当该图片未做任何标签的处理时，则会发出一个提醒message
             if not self.itemsToShapes:#当标注字典里没有任何标注时返回会提示错误
-                self.errorMessage(u'No objects labeled',
+                self.er
+                rorMessage(u'No objects labeled',
                 u'You must label at least one object to save the file.')
                 return False
             return True
@@ -2145,6 +2155,19 @@ class MainWindow(QMainWindow, WindowMixin):#可以带菜单栏、工具栏的只
         print('shapes ',shapes)
         self.loadLabels(shapes)
         self.shape_type = tVocParseReader.getShapeType()
+    def allyes(self):
+        shapes = []
+        for item, shape in self.itemsToShapes.items():
+            shapes.append(shape)
+        self.canvas.setShapeVisible(shapes, True)
+
+    def allno(self):
+        print('no')
+        shapes = []
+        for item, shape in self.itemsToShapes.items():
+            shapes.append(shape)
+        self.canvas.setShapeVisible(shapes, False)
+
 
 
 class Settings(object):
